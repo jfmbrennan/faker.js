@@ -42,14 +42,14 @@ exports.localeFallback = "en";
 exports.definitions = {};
 
 var _definitions = {
-  "name": ["first_name", "last_name", "prefix", "suffix"],
+  "name": ["male_first_name", "female_first_name", "male_last_name", "female_last_name", "male_prefix", "female_prefix", "suffix"],
   "address": ["city_prefix", "city_suffix", "street_suffix", "county", "country", "state", "state_abbr"],
   "company": ["adjective", "noun", "descriptor", "bs_adjective", "bs_noun", "bs_verb"],
   "lorem": ["words"],
   "hacker": ["abbreviation", "adjective", "noun", "verb", "ingverb"],
   "phone_number": ["formats"],
   "finance": ["account_type", "transaction_type", "currency"],
-  "internet": ["avatar_uri", "domain_suffix", "free_email", "password"]
+  "internet": ["male_avatar_uri", "female_avatar_uri", "domain_suffix", "free_email", "password"]
 };
 
 // Create a Getter for all definitions.foo.bar propetries
@@ -252,9 +252,13 @@ var date = {
 
     past: function (years, refDate) {
         var date = (refDate) ? new Date(Date.parse(refDate)) : new Date();
+        var range = {
+          min: 1000,
+          max: (years || 1) * 365 * 24 * 3600 * 1000
+        };
 
         var past = date.getTime();
-        past -= faker.random.number(years) * 365 * 24 * 3600 * 1000; // some time from now to N years ago, in milliseconds
+        past -= faker.random.number(range); // some time from now to N years ago, in milliseconds
         date.setTime(past);
 
         return date;
@@ -262,8 +266,13 @@ var date = {
 
     future: function (years, refDate) {
         var date = (refDate) ? new Date(Date.parse(refDate)) : new Date();
+        var range = {
+          min: 1000,
+          max: (years || 1) * 365 * 24 * 3600 * 1000
+        };
+
         var future = date.getTime();
-        future += faker.random.number(years) * 365 * 3600 * 1000 + 1000; // some time from now to N years later, in milliseconds
+        future += faker.random.number(range); // some time from now to N years later, in milliseconds
         date.setTime(future);
 
         return date;
@@ -280,8 +289,13 @@ var date = {
 
     recent: function (days) {
         var date = new Date();
+        var range = {
+          min: 1000,
+          max: (days || 1) * 24 * 3600 * 1000
+        };
+
         var future = date.getTime();
-        future -= faker.random.number(days) * 24 * 60 * 60 * 1000; // some time from now to N days ago, in milliseconds
+        future -= faker.random.number(range); // some time from now to N days ago, in milliseconds
         date.setTime(future);
 
         return date;
@@ -681,8 +695,16 @@ var faker = require('../index'),
 
 var internet = {
 
-    avatar: function () {
-        return faker.random.array_element(faker.definitions.internet.avatar_uri);
+    avatar: function (gender) {
+      if (typeof faker.definitions.internet.male_avatar_uri !== "undefined" && typeof faker.definitions.internet.female_avatar_uri !== "undefined") {
+        gender = gender || faker.random.gender();
+        if (gender === 'male') {
+          return faker.random.array_element(faker.definitions.internet.male_avatar_uri);
+        } else {
+          return faker.random.array_element(faker.definitions.internet.female_avatar_uri);
+        }
+      }
+      return faker.random.array_element(faker.definitions.internet.avatar_uri);
     },
 
     email: function (firstName, lastName, provider) {
@@ -747,7 +769,13 @@ var internet = {
         var red = Math.floor((faker.random.number(256) + baseRed255) / 2);
         var green = Math.floor((faker.random.number(256) + baseRed255) / 2);
         var blue = Math.floor((faker.random.number(256) + baseRed255) / 2);
-        return '#' + red.toString(16) + green.toString(16) + blue.toString(16);
+        var redStr = red.toString(16);
+        var greenStr = green.toString(16);
+        var blueStr = blue.toString(16);
+        return '#' +
+          (redStr.length === 1 ? '0' : '') + redStr +
+          (greenStr.length === 1 ? '0' : '') + greenStr +
+          (blueStr.length === 1 ? '0': '') + blueStr;
 
     },
 
@@ -11857,6 +11885,15 @@ for (var i = 0; i < avatarUri.length; i++) {
   en.internet.avatar_uri.push("https://s3.amazonaws.com/uifaces/faces/twitter/" + avatarUri[i]);
 };
 
+en.internet.male_avatar_uri = [];
+for (var i = 0; i < 100; i++) {
+  en.internet.male_avatar_uri.push("https://randomuser.me/api/portraits/thumb/men/" + i + ".jpg");
+};
+en.internet.female_avatar_uri = [];
+for (var i = 0; i < 95; i++) {
+  en.internet.female_avatar_uri.push("https://randomuser.me/api/portraits/thumb/women/" + i + ".jpg");
+};
+
 en.lorem = {
   "words": [
     "alias",
@@ -16557,6 +16594,511 @@ en.name = {
     "#{first_name} #{last_name}",
     "#{first_name} #{last_name}",
     "#{first_name} #{last_name}"
+  ],
+  "male_first_name": [
+    "Aaron",
+    "Abe",
+    "Abraham",
+    "Adam",
+    "Adrian",
+    "Aidan",
+    "Alan",
+    "Albert",
+    "Alec",
+    "Alexander",
+    "Alf",
+    "Alfred",
+    "Ambrose",
+    "Amos",
+    "Andy",
+    "Anthony",
+    "Antonio",
+    "Arnold",
+    "Aron",
+    "Arthur",
+    "Austin",
+    "Barney",
+    "Ben",
+    "Benjamin",
+    "Bernard",
+    "Bill",
+    "Bobby",
+    "Boris",
+    "Bradley",
+    "Brendan",
+    "Bruce",
+    "Cecil",
+    "Chris",
+    "Christopher",
+    "Clement",
+    "Colin",
+    "Conor",
+    "Craig",
+    "Dale",
+    "Danny",
+    "Dario",
+    "Darren",
+    "Daryl",
+    "David",
+    "Dean",
+    "Declan",
+    "Dennis",
+    "Derek",
+    "Donnie",
+    "Doug",
+    "Dwight",
+    "Dylan",
+    "Edgar",
+    "Edward",
+    "Emmett",
+    "Eric",
+    "Ethan",
+    "Evan",
+    "Frank",
+    "Fred",
+    "Gary",
+    "Gavin",
+    "Gerard",
+    "Gerry",
+    "Greg",
+    "Gus",
+    "Henry",
+    "Hugh",
+    "Ivan",
+    "Jack",
+    "Jamie",
+    "Jimmy",
+    "Joe",
+    "John",
+    "Jonathon",
+    "Joseph",
+    "Justin",
+    "Kenneth",
+    "Kevin",
+    "Larry",
+    "Lee",
+    "Leo",
+    "Liam",
+    "Lucas",
+    "Luther",
+    "Malachi",
+    "Marcus",
+    "Mark",
+    "Martin",
+    "Matt",
+    "Max",
+    "Michael",
+    "Micheal",
+    "Mike",
+    "Mossie",
+    "Nathan",
+    "Neil",
+    "Nick",
+    "Nigel",
+    "Noah",
+    "Noel",
+    "Norbert",
+    "Ollie",
+    "Oscar",
+    "Owen",
+    "Pat",
+    "Paul",
+    "Pete",
+    "Peter",
+    "Philip",
+    "Ray",
+    "Rick",
+    "Rob",
+    "Robbie",
+    "Roger",
+    "Ross",
+    "Russell",
+    "Sam",
+    "Seamus",
+    "Sean",
+    "Shane",
+    "Simon",
+    "Stan",
+    "Stephen",
+    "Steve",
+    "Stuart",
+    "Ted",
+    "Thomas",
+    "Timothy",
+    "Toby",
+    "Tom",
+    "Tomas",
+    "Travis",
+    "Trevor",
+    "Victor",
+    "Vincent",
+    "Vinnie",
+    "Walter",
+    "Warren",
+    "Wayne",
+    "William",
+    "Wilson",
+    "Zachariah"
+  ],
+  "female_first_name": [
+    "Abbey",
+    "Abigale",
+    "Ada",
+    "Adrianna",
+    "Agnes",
+    "Aileen",
+    "Ali",
+    "Alice",
+    "Alison",
+    "Amanda",
+    "Amelie",
+    "Amy",
+    "Angela",
+    "Anna",
+    "Annamarie",
+    "Anne",
+    "Annette",
+    "April",
+    "Ashlynn",
+    "Barbara",
+    "Bernie",
+    "Bethany",
+    "Brenda",
+    "Bridget",
+    "Carmel",
+    "Carol",
+    "Caroline",
+    "Catherine",
+    "Chantelle",
+    "Chloe",
+    "Christine",
+    "Claire",
+    "Colleen",
+    "Deborah",
+    "Dee",
+    "Diana",
+    "Edna",
+    "Eileen",
+    "Eleanore",
+    "Elizabeth",
+    "Emer",
+    "Emily",
+    "Emma",
+    "Erika",
+    "Eva",
+    "Evelyn",
+    "Fiona",
+    "Frances",
+    "Gabrielle",
+    "Gail",
+    "Geraldine",
+    "Gina",
+    "Grace",
+    "Gwen",
+    "Hailey",
+    "Hannah",
+    "Hazel",
+    "Helen",
+    "Hillary",
+    "Imelda",
+    "Isabelle",
+    "Jacquelyn",
+    "Jade",
+    "Jane",
+    "Jaqueline",
+    "Jennifer",
+    "Jessica",
+    "Joanne",
+    "Judy",
+    "Julie",
+    "Karen",
+    "Katelyn",
+    "Kaylee",
+    "Kim",
+    "Kirsten",
+    "Kylie",
+    "Laura",
+    "Lea",
+    "Leanne",
+    "Lily",
+    "Linda",
+    "Lisa",
+    "Lorraine",
+    "Lorna",
+    "Lucy",
+    "Madaline",
+    "Maeve",
+    "Margaret",
+    "Marge",
+    "Maria",
+    "Marie",
+    "Marion",
+    "Martina",
+    "Maureen",
+    "Meghan",
+    "Melissa",
+    "Michaela",
+    "Michelle",
+    "Molly",
+    "Nadia",
+    "Naomi",
+    "Natalie",
+    "Natasha",
+    "Nina",
+    "Olivia",
+    "Pamela",
+    "Patricia",
+    "Paula",
+    "Pauline",
+    "Phoebe",
+    "Rachel",
+    "Rebecca",
+    "Rita",
+    "Rose",
+    "Rosemary",
+    "Roslyn",
+    "Rowena",
+    "Ruby",
+    "Ruth",
+    "Sabina",
+    "Sally",
+    "Samantha",
+    "Sharon",
+    "Sophie",
+    "Stacey",
+    "Stephanie",
+    "Susan",
+    "Susanna",
+    "Suzanne",
+    "Tanya",
+    "Teresa",
+    "Tess",
+    "Tia",
+    "Tina",
+    "Tracy",
+    "Una",
+    "Ursula",
+    "Veronica",
+    "Victoria",
+    "Wendy",
+    "Whitney",
+    "Winifred",
+    "Yvette",
+    "Yvonne"
+  ],
+  "male_last_name": [
+    "Barry",
+    "Bell",
+    "Boyle",
+    "Brady",
+    "Brennan",
+    "Brown",
+    "Buckley",
+    "Burke",
+    "Burns",
+    "Byrne",
+    "Campbell",
+    "Casey",
+    "Clarke",
+    "Collins",
+    "Connolly",
+    "Cullen",
+    "Cunningham",
+    "Daly",
+    "Donnelly",
+    "Donovan",
+    "Doyle",
+    "Duffy",
+    "Dunne",
+    "Fitzgerald",
+    "Fitzpatrick",
+    "Flanagan",
+    "Flynn",
+    "Foley",
+    "Gallagher",
+    "Graham",
+    "Griffin",
+    "Hayes",
+    "Healy",
+    "Higgins",
+    "Hogan",
+    "Hughes",
+    "Johnston",
+    "Kane",
+    "Kavanagh",
+    "Keane",
+    "Kelly",
+    "Kennedy",
+    "Kenny",
+    "King",
+    "Lynch",
+    "Lyons",
+    "MacDermott",
+    "MacDonald",
+    "MacKenna",
+    "MacMahon",
+    "MacNamara",
+    "Magee",
+    "Maguire",
+    "Maher",
+    "Martin",
+    "McCarthy",
+    "McDonnell",
+    "McGrath",
+    "McLoughlin",
+    "Molony",
+    "Moore",
+    "Moran",
+    "Mullan",
+    "Murphy",
+    "Murray",
+    "Nolan",
+    "O'Brien",
+    "O'Callaghan",
+    "O'Carroll",
+    "O'Connell",
+    "O'Connor",
+    "O'Doherty",
+    "O'Donnell",
+    "O'Dwyer",
+    "O'Farrell",
+    "O'Keeffe",
+    "O'Leary",
+    "O'Mahony",
+    "O'Neill",
+    "O'Reilly",
+    "O'Rourke",
+    "O'Shea",
+    "O'Sullivan",
+    "Power",
+    "Quinn",
+    "Regan",
+    "Reid",
+    "Robinson",
+    "Ryan",
+    "Scott",
+    "Sheehan",
+    "Smith",
+    "Stewart",
+    "Sweeney",
+    "Thompson",
+    "Walsh",
+    "Ward",
+    "Whelan",
+    "White",
+    "Wilson"
+  ],
+  "female_last_name": [
+    "Barry",
+    "Bell",
+    "Boyle",
+    "Brady",
+    "Brennan",
+    "Brown",
+    "Buckley",
+    "Burke",
+    "Burns",
+    "Byrne",
+    "Campbell",
+    "Casey",
+    "Clarke",
+    "Collins",
+    "Connolly",
+    "Cullen",
+    "Cunningham",
+    "Daly",
+    "Donnelly",
+    "Donovan",
+    "Doyle",
+    "Duffy",
+    "Dunne",
+    "Fitzgerald",
+    "Fitzpatrick",
+    "Flanagan",
+    "Flynn",
+    "Foley",
+    "Gallagher",
+    "Graham",
+    "Griffin",
+    "Hayes",
+    "Healy",
+    "Higgins",
+    "Hogan",
+    "Hughes",
+    "Johnston",
+    "Kane",
+    "Kavanagh",
+    "Keane",
+    "Kelly",
+    "Kennedy",
+    "Kenny",
+    "King",
+    "Lynch",
+    "Lyons",
+    "MacDermott",
+    "MacDonald",
+    "MacKenna",
+    "MacMahon",
+    "MacNamara",
+    "Magee",
+    "Maguire",
+    "Maher",
+    "Martin",
+    "McCarthy",
+    "McDonnell",
+    "McGrath",
+    "McLoughlin",
+    "Molony",
+    "Moore",
+    "Moran",
+    "Mullan",
+    "Murphy",
+    "Murray",
+    "Nolan",
+    "O'Brien",
+    "O'Callaghan",
+    "O'Carroll",
+    "O'Connell",
+    "O'Connor",
+    "O'Doherty",
+    "O'Donnell",
+    "O'Dwyer",
+    "O'Farrell",
+    "O'Keeffe",
+    "O'Leary",
+    "O'Mahony",
+    "O'Neill",
+    "O'Reilly",
+    "O'Rourke",
+    "O'Shea",
+    "O'Sullivan",
+    "Power",
+    "Quinn",
+    "Regan",
+    "Reid",
+    "Robinson",
+    "Ryan",
+    "Scott",
+    "Sheehan",
+    "Smith",
+    "Stewart",
+    "Sweeney",
+    "Thompson",
+    "Walsh",
+    "Ward",
+    "Whelan",
+    "White",
+    "Wilson"
+  ],
+  "male_prefix": [
+    "Mr.",
+    "Dr."
+  ],
+  "female_prefix": [
+    "Mrs.",
+    "Ms.",
+    "Miss",
+    "Dr."
   ]
 };
 en.phone_number = {
@@ -17655,6 +18197,7 @@ en.finance.currency = {
     "symbol": ""
   }
 };
+
 },{}],15:[function(require,module,exports){
 var en_AU = {};
 module["exports"] = en_AU;
@@ -42003,36 +42546,61 @@ module.exports = lorem;
 var faker = require('../index');
 
 var _name = {
-    firstName: function () {
-        return faker.random.array_element(faker.definitions.name.first_name)
-    },
 
-    lastName: function () {
-      return faker.random.array_element(faker.definitions.name.last_name)
-    },
+  firstName: function (gender) {
+    if (typeof faker.definitions.name.male_first_name !== "undefined" && typeof faker.definitions.name.female_first_name !== "undefined") {
+      gender = gender || faker.random.gender();
+      if (gender === 'male') {
+        return faker.random.array_element(faker.locales[faker.locale].name.male_first_name);
+      } else {
+        return faker.random.array_element(faker.locales[faker.locale].name.female_first_name);
+      }
+    }
+    return faker.random.array_element(faker.definitions.name.first_name);
+  },
 
-    findName: function (firstName, lastName) {
-        var r = faker.random.number(8);
-        firstName = firstName || faker.name.firstName();
-        lastName = lastName || faker.name.lastName();
-        switch (r) {
-        case 0:
-            return faker.name.prefix() + " " + firstName + " " + lastName;
-        case 1:
-            return firstName + " " + lastName + " " + faker.name.suffix();
-        }
+  lastName: function (gender) {
+    if (typeof faker.definitions.name.male_last_name !== "undefined" && typeof faker.definitions.name.female_last_name !== "undefined") {
+      gender = gender || faker.random.gender();
+      if (gender === 'male') {
+        return faker.random.array_element(faker.locales[faker.locale].name.male_last_name);
+      } else {
+        return faker.random.array_element(faker.locales[faker.locale].name.female_last_name);
+      }
+    }
+    return faker.random.array_element(faker.definitions.name.last_name);
+  },
 
-        return firstName + " " + lastName;
-    },
+  findName: function (firstName, lastName, gender) {
+//    var r = faker.random.number(8);
+    gender = gender || faker.random.gender();
+    firstName = firstName || faker.name.firstName(gender);
+    lastName = lastName || faker.name.lastName(gender);
+//    switch (r) {
+//    case 0:
+//      return faker.name.prefix(gender) + " " + firstName + " " + lastName;
+//    case 1:
+//      return firstName + " " + lastName + " " + faker.name.suffix();
+//    }
 
-    prefix: function () {
-        return faker.random.array_element(faker.definitions.name.prefix);
-    },
+    return firstName + " " + lastName;
+  },
 
-    suffix: function () {
-        return faker.random.array_element(faker.definitions.name.suffix);
-    },
+  prefix: function (gender) {
+    if (typeof faker.definitions.name.male_prefix !== "undefined" && typeof faker.definitions.name.female_prefix !== "undefined") {
+      gender = gender || faker.random.gender();
+      if (gender === 'male') {
+        return faker.random.array_element(faker.locales[faker.locale].name.male_prefix);
+      } else {
+        return faker.random.array_element(faker.locales[faker.locale].name.female_prefix);
+      }
+    }
+    return faker.random.array_element(faker.definitions.name.prefix);
+  },
 
+  suffix: function () {
+      return faker.random.array_element(faker.definitions.name.suffix);
+  }
 };
 
 module.exports = _name;
@@ -42069,16 +42637,12 @@ var random = {
     number: function (options) {
 
         if (typeof options === "number") {
-          var options = {
+          options = {
             max: options
           };
         }
 
-        options = options || {
-          min: 0,
-          max: 1,
-          precision: 1
-        };
+        options = options || {};
 
         if (typeof options.min === "undefined") {
           options.min = 0;
@@ -42087,18 +42651,24 @@ var random = {
         if (typeof options.max === "undefined") {
           options.max = 1;
         }
-
-        // by incrementing max by 1, max becomes inclusive of the range
-        if (options.max > 0) {
-          options.max++;
+        if (typeof options.precision === "undefined") {
+          options.precision = 1;
         }
 
-        var randomNumber = mersenne.rand(options.max, options.min);
+        // Make the range inclusive of the max value
+        var max = options.max;
+        if (max > 0) {
+          max += options.precision;
+        }
+
+        var randomNumber = options.precision * Math.floor(
+          mersenne.rand(max / options.precision, options.min / options.precision));
+
         return randomNumber;
 
     },
 
-    // takes an array and returns the array randomly sorted
+    // takes an array and returns a random element of the array
     array_element: function (array) {
         array = array || ["a", "b", "c"];
         var r = faker.random.number({ max: array.length - 1 });
@@ -42112,6 +42682,20 @@ var random = {
         var key = faker.random.array_element(array);
 
         return field === "key" ? key : object[key];
+    },
+
+    uuid : function () {
+        var RFC4122_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+        var replacePlaceholders = function (placeholder) {
+            var random = Math.random()*16|0;
+            var value = placeholder == 'x' ? random : (random &0x3 | 0x8);
+            return value.toString(16);
+        };
+        return RFC4122_TEMPLATE.replace(/[xy]/g, replacePlaceholders);
+    },
+
+    gender : function () {
+        return faker.random.array_element(['male', 'female']);
     }
 };
 

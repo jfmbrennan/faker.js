@@ -41,14 +41,14 @@ exports.localeFallback = "en";
 exports.definitions = {};
 
 var _definitions = {
-  "name": ["first_name", "last_name", "prefix", "suffix"],
+  "name": ["male_first_name", "female_first_name", "male_last_name", "female_last_name", "male_prefix", "female_prefix", "suffix"],
   "address": ["city_prefix", "city_suffix", "street_suffix", "county", "country", "state", "state_abbr"],
   "company": ["adjective", "noun", "descriptor", "bs_adjective", "bs_noun", "bs_verb"],
   "lorem": ["words"],
   "hacker": ["abbreviation", "adjective", "noun", "verb", "ingverb"],
   "phone_number": ["formats"],
   "finance": ["account_type", "transaction_type", "currency"],
-  "internet": ["avatar_uri", "domain_suffix", "free_email", "password"]
+  "internet": ["male_avatar_uri", "female_avatar_uri", "domain_suffix", "free_email", "password"]
 };
 
 // Create a Getter for all definitions.foo.bar propetries
